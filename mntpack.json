@@ -1,0 +1,12 @@
+{
+  "name": "wtree",
+  "build": "gcc -std=c11 -O2 -Wall -Wextra -DDT_DIR=4 src/main.c -o wtree",
+  "run": {
+    "windows-x64": ".\\wtree.exe",
+    "windows-x86": ".\\wtree.exe",
+    "linux-x64": "./wtree",
+    "linux-arm64": "./wtree",
+    "macos-x64": "./wtree",
+    "macos-arm64": "./wtree"
+  }
+}
