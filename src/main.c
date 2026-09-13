@@ -59,12 +59,12 @@ int walk(const char* directory, const char* prefix, counter_t *counter, int dept
     current = malloc(sizeof(entry_t));
     current->name = strcpy(malloc(strlen(file_dirent->d_name) + 1), file_dirent->d_name);
     
-    // cross system
-    char full_path[1024];
-    snprintf(full_path, sizeof(full_path), "%s/%s", base_path, file_dirent->d_name);
+    // Cross-system directory check using stat
+    char path_buf[1024];
+    snprintf(path_buf, sizeof(path_buf), "%s/%s", directory, file_dirent->d_name);
     
     struct stat path_stat;
-    if (stat(full_path, &path_stat) == 0) {
+    if (stat(path_buf, &path_stat) == 0) {
         current->is_dir = S_ISDIR(path_stat.st_mode);
     } else {
         current->is_dir = 0; // Fallback if stat fails
