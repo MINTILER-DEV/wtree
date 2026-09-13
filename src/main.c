@@ -4,6 +4,11 @@
 #include <dirent.h>
 #include <sys/stat.h>
 
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
+
 typedef struct counter {
   size_t dirs;
   size_t files;
@@ -128,6 +133,10 @@ int walk(const char* directory, const char* prefix, counter_t *counter, int dept
 }
 
 int main(int argc, char *argv[]) {
+  // Force Windows console to use UTF-8 encoding
+  #ifdef _WIN32
+  SetConsoleOutputCP(CP_UTF8);
+  #endif
 
   char *directory = ".";
   int i;
