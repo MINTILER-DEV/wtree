@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <dirent.h>
+#include <sys/stat.h>
 
 typedef struct counter {
   size_t dirs;
@@ -57,7 +58,18 @@ int walk(const char* directory, const char* prefix, counter_t *counter, int dept
 
     current = malloc(sizeof(entry_t));
     current->name = strcpy(malloc(strlen(file_dirent->d_name) + 1), file_dirent->d_name);
-    current->is_dir = file_dirent->d_type == DT_DIR;
+    
+    // cross system
+    char full_path[1024];
+    snprintf(full_path, sizeof(full_path), "%s/%s", base_path, file_dirent->d_name);
+    
+    struct stat path_stat;
+    if (stat(full_path, &path_stat) == 0) {
+        current->is_dir = S_ISDIR(path_stat.st_mode);
+    } else {
+        current->is_dir = 0; // Fallback if stat fails
+    }
+
     current->next = NULL;
 
     if (head == NULL) {
